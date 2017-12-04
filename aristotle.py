@@ -7,10 +7,7 @@
 import numpy as np
 from collections import Counter
 
-# matrix of values
-# values = np.zeros((9, 9), int)
-
-# dictionnary with all numbers
+# dictionnary with all numbers and their availability (true, false)
 numbers = {}
 max_n = 19
 
@@ -136,6 +133,8 @@ def search_line4(max_number, successLine, numbers, line1, line2, line3, line4, l
 									numbers[k+1] = True
 						if not successLine[3]:
 							numbers[j+1] = True
+			else:
+				numbers[i+1] = True
 			if not successLine[3]:
 				numbers[i+1] = True
 
@@ -165,8 +164,12 @@ def search_line5(max_number, successLine, numbers, line1, line2, line3, line4, l
 										numbers[k+1] = True
 									if not successLine[4]:
 										numbers[k+1] = True
+						else:
+							numbers[j+1] = True
 						if not successLine[4]:
 							numbers[j+1] = True
+			else:
+				numbers[i+1] = True
 			if not successLine[4]:
 				numbers[i+1] = True
 
@@ -198,13 +201,10 @@ def search_puzzle(max_number):
 						if numbers[k+1] and not successLine[0]:
 							line1[2] = k+1
 							numbers[k+1] = False
-							#print(line1)
 							if (line1[0]+line1[1]+line1[2] == 38):
 								# -------------------
 								# proceed with line 2
 								# -------------------
-								#print(line1)
-								#print(numbers)
 								successLine[0] = search_line2(max_number, successLine, numbers, line1, line2, line3, line4, line5)
 							else:
 								numbers[k+1] = True
