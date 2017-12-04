@@ -4,6 +4,7 @@
 #
 # ---------------------------
 
+import sys
 import numpy as np
 from collections import Counter
 
@@ -216,19 +217,20 @@ def search_puzzle(max_number):
 				numbers[i+1] = True
 
 	if successLine[0]:
-		print(line1)
-		print(line2)
-		print(line3)
-		print(line4)
-		print(line5)
+		display_puzzle(line1, line2, line3, line4, line5)
 	else:
 		print("Problem...")
 
-def display_puzzle(values):
+def display_puzzle(line1, line2, line3, line4, line5):
 	# display the result
 	# ------------------
-
-	return None
+	#sys.stdout.flush()
+	sys.stdout.write('\r\n' + '   ' + ''.join(str(line1[i]).center(3) for i in range(3)) + '\n' \
+					+ '  ' + ''.join(str(line2[i]).center(3) for i in range(4)) + '\n' \
+					+ ''.join(str(line3[i]).center(3) for i in range(5)) + '\n' \
+					+ '  ' + ''.join(str(line4[i]).center(3) for i in range(4)) + '\n' \
+					+ '   ' + ''.join(str(line5[i]).center(3) for i in range(3)) + '\n\n')
+	sys.stdout.flush()
 
 
 if __name__ == '__main__':
