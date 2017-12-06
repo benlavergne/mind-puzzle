@@ -21,193 +21,203 @@ def init_digit_pool(max_number):
 	return init_values
 
 
-def search_line1(max_number, successLine, numbers, line1, line2, line3, line4, line5):
+def search_line1(max_number, numbers, line1, line2, line3, line4, line5):
 	'''  Search line 1
 	'''
+	successLine = False
+
 	for i in range(max_number):
-		if numbers[i+1] and not successLine[0]:
+		if numbers[i+1] and not successLine:
 			line1[0] = i+1
 			numbers[i+1] = False
 			for j in range(max_number):
-				if numbers[j+1] and (line1[0]+j+1 >= 19) and not successLine[0]:
+				if numbers[j+1] and (line1[0]+j+1 >= 19) and not successLine:
 					line1[1] = j+1
 					numbers[j+1] = False
 					diff = 38 - line1[0] - line1[1]
-					if diff in numbers and numbers[diff] and not successLine[0]:
+					if diff in numbers and numbers[diff] and not successLine:
 						line1[2] = diff
 						numbers[diff] = False
 						# -------------------
 						# proceed with line 2
 						# -------------------
-						successLine[0] = search_line2(max_number, successLine, numbers, line1, line2, line3, line4, line5)
-						if not successLine[0]:
+						successLine = search_line2(max_number, numbers, line1, line2, line3, line4, line5)
+						if not successLine:
 							numbers[diff] = True
-					if not successLine[0]:
+					if not successLine:
 						numbers[j+1] = True
-			if not successLine[0]:
+			if not successLine:
 				numbers[i+1] = True
 
-	return successLine[0]
+	return successLine
 
 
-def search_line2(max_number, successLine, numbers, line1, line2, line3, line4, line5):
+def search_line2(max_number, numbers, line1, line2, line3, line4, line5):
 	'''  Search line 2
 	'''
+	successLine = False
+
 	for i in range(max_number):
-		if numbers[i+1] and not successLine[1]:
+		if numbers[i+1] and not successLine:
 			line2[0] = i+1
 			numbers[i+1] = False
 			for j in range(max_number):
-				if numbers[j+1] and not successLine[1]:
+				if numbers[j+1] and not successLine:
 					line2[1] = j+1
 					numbers[j+1] = False
 					for k in range(max_number):
-						if numbers[k+1] and (line2[0]+line2[1]+k+1 >= 19) and (line2[0]+line2[1]+k+1 < 38) and not successLine[1]:
+						if numbers[k+1] and (line2[0]+line2[1]+k+1 >= 19) and (line2[0]+line2[1]+k+1 < 38) and not successLine:
 							line2[2] = k+1
 							numbers[k+1] = False
 							diff = 38 - line2[0] - line2[1] - line2[2]
-							if numbers[diff] and not successLine[1]:
+							if numbers[diff] and not successLine:
 								line2[3] = diff
 								numbers[diff] = False
 								# -------------------
 								# proceed with line 3
 								# -------------------
-								successLine[1] = search_line3(max_number, successLine, numbers, line1, line2, line3, line4, line5)
-								if not successLine[1]:
+								successLine = search_line3(max_number, numbers, line1, line2, line3, line4, line5)
+								if not successLine:
 									numbers[diff] = True
-							if not successLine[1]:
+							if not successLine:
 								numbers[k+1] = True
-					if not successLine[1]:
+					if not successLine:
 						numbers[j+1] = True
-			if not successLine[1]:
+			if not successLine:
 				numbers[i+1] = True
 
-	return successLine[1]
+	return successLine
 
 
-def search_line3(max_number, successLine, numbers, line1, line2, line3, line4, line5):
+def search_line3(max_number, numbers, line1, line2, line3, line4, line5):
 	'''  Search line 3
 	'''
+	successLine = False
+
 	for i in range(max_number):
-		if numbers[i+1] and not successLine[2]:
+		if numbers[i+1] and not successLine:
 			line3[0] = i+1
 			numbers[i+1] = False
 			if (line1[0]+line2[0]+line3[0] == 38):
 				for j in range(max_number):
-					if numbers[j+1] and not successLine[2]:
+					if numbers[j+1] and not successLine:
 						line3[1] = j+1
 						numbers[j+1] = False
 						for k in range(max_number):
-							if numbers[k+1] and not successLine[2]:
+							if numbers[k+1] and not successLine:
 								line3[2] = k+1
 								numbers[k+1] = False
 								for l in range(max_number):
-									if numbers[l+1] and not successLine[2]:
+									if numbers[l+1] and not successLine:
 										line3[3] = l+1
 										numbers[l+1] = False
 										for m in range(max_number):
-											if numbers[m+1] and not successLine[2]:
+											if numbers[m+1] and not successLine:
 												line3[4] = m+1
 												numbers[m+1] = False
 												if (line3[0]+line3[1]+line3[2]+line3[3]+line3[4] == 38) and (line1[2]+line2[3]+line3[4] == 38):
 													# -------------------
 													# proceed with line 4
 													# -------------------
-													successLine[2] = search_line4(max_number, successLine, numbers, line1, line2, line3, line4, line5)
+													successLine = search_line4(max_number, numbers, line1, line2, line3, line4, line5)
 												else:
 													numbers[m+1] = True
-												if not successLine[2]:
+												if not successLine:
 													numbers[m+1] = True
-										if not successLine[2]:
+										if not successLine:
 											numbers[l+1] = True
-								if not successLine[2]:
+								if not successLine:
 									numbers[k+1] = True
-						if not successLine[2]:
+						if not successLine:
 							numbers[j+1] = True
 			else:
 				numbers[i+1] = True
-			if not successLine[2]:
+			if not successLine:
 				numbers[i+1] = True
 
-	return successLine[2]
+	return successLine
 
 
-def search_line4(max_number, successLine, numbers, line1, line2, line3, line4, line5):
+def search_line4(max_number, numbers, line1, line2, line3, line4, line5):
 	'''  Search line 4
 	'''
+	successLine = False
+
 	for i in range(max_number):
-		if numbers[i+1] and not successLine[3]:
+		if numbers[i+1] and not successLine:
 			line4[0] = i+1
 			numbers[i+1] = False
 			if (line1[1]+line2[1]+line3[1]+line4[0] == 38):
 				for j in range(max_number):
-					if numbers[j+1] and not successLine[3]:
+					if numbers[j+1] and not successLine:
 						line4[1] = j+1
 						numbers[j+1] = False
 						for k in range(max_number):
-							if numbers[k+1] and not successLine[3]:
+							if numbers[k+1] and not successLine:
 								line4[2] = k+1
 								numbers[k+1] = False
 								for l in range(max_number):
-									if numbers[l+1] and not successLine[3]:
+									if numbers[l+1] and not successLine:
 										line4[3] = l+1
 										numbers[l+1] = False
 										if (line4[0]+line4[1]+line4[2]+line4[3] == 38) and (line1[1]+line2[2]+line3[3]+line4[3] == 38):
 											# -------------------
 											# proceed with line 5
 											# -------------------
-											successLine[3] = search_line5(max_number, successLine, numbers, line1, line2, line3, line4, line5)
+											successLine = search_line5(max_number, numbers, line1, line2, line3, line4, line5)
 										else:
 											numbers[l+1] = True
-										if not successLine[3]:
+										if not successLine:
 											numbers[l+1] = True
-								if not successLine[3]:
+								if not successLine:
 									numbers[k+1] = True
-						if not successLine[3]:
+						if not successLine:
 							numbers[j+1] = True
 			else:
 				numbers[i+1] = True
-			if not successLine[3]:
+			if not successLine:
 				numbers[i+1] = True
 
-	return successLine[3]
+	return successLine
 
-def search_line5(max_number, successLine, numbers, line1, line2, line3, line4, line5):
+def search_line5(max_number, numbers, line1, line2, line3, line4, line5):
 	'''  Search line 5
 	'''
+	successLine = False
+
 	for i in range(max_number):
-		if numbers[i+1] and not successLine[4]:
+		if numbers[i+1] and not successLine:
 			line5[0] = i+1
 			numbers[i+1] = False
 			if (line3[0]+line4[0]+line5[0] == 38) and (line1[2]+line2[2]+line3[2]+line4[1]+line5[0] == 38):
 				for j in range(max_number):
-					if numbers[j+1] and not successLine[4]:
+					if numbers[j+1] and not successLine:
 						line5[1] = j+1
 						numbers[j+1] = False
 						if (line2[0]+line3[1]+line4[1]+line5[1] == 38) and (line2[3]+line3[3]+line4[2]+line5[1] == 38):
 							for k in range(max_number):
-								if numbers[k+1] and not successLine[4]:
+								if numbers[k+1] and not successLine:
 									line5[2] = k+1
 									numbers[k+1] = False
 									if (line5[0]+line5[1]+line5[2] == 38) and (line1[0]+line2[1]+line3[2]+line4[2]+line5[2] == 38) and (line3[4]+line4[3]+line5[2] == 38):
 										# -------------------
 										# Solution Found !!!!
 										# -------------------
-										successLine[4] = True
+										successLine = True
 									else:
 										numbers[k+1] = True
-									if not successLine[4]:
+									if not successLine:
 										numbers[k+1] = True
 						else:
 							numbers[j+1] = True
-						if not successLine[4]:
+						if not successLine:
 							numbers[j+1] = True
 			else:
 				numbers[i+1] = True
-			if not successLine[4]:
+			if not successLine:
 				numbers[i+1] = True
 
-	return successLine[4]
+	return successLine
 
 
 
@@ -225,9 +235,7 @@ def search_puzzle(max_number):
 	line4 = [0,0,0,0]
 	line5 = [0,0,0]
 
-	successLine = [False, False, False, False, False]
-
-	success = search_line1(max_number, successLine, numbers, line1, line2, line3, line4, line5)
+	success = search_line1(max_number, numbers, line1, line2, line3, line4, line5)
 
 	# end timer
 	end = timer()
