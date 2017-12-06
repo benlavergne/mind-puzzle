@@ -143,7 +143,8 @@ def search_line4(max_number, numbers, line1, line2, line3, line4, line5):
 			line4[0] = only_choice
 			numbers[only_choice] = False
 			for j in range(1, max_number+1):
-				if numbers[j] and not successLine:
+				mid1 = line2[0]+line3[1]+j
+				if numbers[j] and (mid1 >= 19) and (mid1 < 38) and not successLine:
 					line4[1] = j
 					numbers[j] = False
 					for k in range(1, max_number+1):
