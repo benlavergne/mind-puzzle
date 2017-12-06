@@ -7,6 +7,7 @@
 import sys
 import numpy as np
 from collections import Counter
+from timeit import default_timer as timer
 
 # dictionnary with all numbers and their availability (true, false)
 numbers = {}
@@ -179,6 +180,7 @@ def search_line5(max_number, successLine, numbers, line1, line2, line3, line4, l
 
 
 def search_puzzle(max_number):
+	start = timer()
 	numbers = init_digit_pool(max_number)
 
 	# create 5 target lines
@@ -198,26 +200,26 @@ def search_puzzle(max_number):
 				if numbers[j+1] and not successLine[0]:
 					line1[1] = j+1
 					numbers[j+1] = False
-					for k in range(max_number):
-						if numbers[k+1] and not successLine[0]:
-							line1[2] = k+1
-							numbers[k+1] = False
-							if (line1[0]+line1[1]+line1[2] == 38):
-								# -------------------
-								# proceed with line 2
-								# -------------------
-								successLine[0] = search_line2(max_number, successLine, numbers, line1, line2, line3, line4, line5)
-							else:
-								numbers[k+1] = True
-							if not successLine[0]:
-								numbers[k+1] = True
+					diff = 38 - line1[0] - line1[1]
+					#print(diff)
+					if diff in numbers and numbers[diff] and not successLine[0]:
+						line1[2] = diff
+						numbers[diff] = False
+						# -------------------
+						# proceed with line 2
+						# -------------------
+						successLine[0] = search_line2(max_number, successLine, numbers, line1, line2, line3, line4, line5)
 					if not successLine[0]:
+						if diff in numbers:
+							numbers[diff] = True
 						numbers[j+1] = True
 			if not successLine[0]:
 				numbers[i+1] = True
+	end = timer()
 
 	if successLine[0]:
 		display_puzzle(line1, line2, line3, line4, line5)
+		display_time(end - start)
 	else:
 		print("Problem...")
 
@@ -231,6 +233,10 @@ def display_puzzle(line1, line2, line3, line4, line5):
 					+ ' ' + ''.join(str(line4[i]).center(3) for i in range(4)) + '\n' \
 					+ '  ' + ''.join(str(line5[i]).center(3) for i in range(3)) + '\n\n')
 	sys.stdout.flush()
+
+
+def display_time(time_length):
+	print(" Time elapsed in seconds : ", time_length)
 
 
 if __name__ == '__main__':
