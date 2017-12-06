@@ -29,11 +29,10 @@ def search_line1(max_number, successLine, numbers, line1, line2, line3, line4, l
 			line1[0] = i+1
 			numbers[i+1] = False
 			for j in range(max_number):
-				if numbers[j+1] and not successLine[0]:
+				if numbers[j+1] and (line1[0]+j+1 >= 19) and not successLine[0]:
 					line1[1] = j+1
 					numbers[j+1] = False
 					diff = 38 - line1[0] - line1[1]
-					#print(diff)
 					if diff in numbers and numbers[diff] and not successLine[0]:
 						line1[2] = diff
 						numbers[diff] = False
@@ -41,9 +40,9 @@ def search_line1(max_number, successLine, numbers, line1, line2, line3, line4, l
 						# proceed with line 2
 						# -------------------
 						successLine[0] = search_line2(max_number, successLine, numbers, line1, line2, line3, line4, line5)
-					if not successLine[0]:
-						if diff in numbers:
+						if not successLine[0]:
 							numbers[diff] = True
+					if not successLine[0]:
 						numbers[j+1] = True
 			if not successLine[0]:
 				numbers[i+1] = True
@@ -63,22 +62,19 @@ def search_line2(max_number, successLine, numbers, line1, line2, line3, line4, l
 					line2[1] = j+1
 					numbers[j+1] = False
 					for k in range(max_number):
-						if numbers[k+1] and not successLine[1]:
+						if numbers[k+1] and (line2[0]+line2[1]+k+1 >= 19) and (line2[0]+line2[1]+k+1 < 38) and not successLine[1]:
 							line2[2] = k+1
 							numbers[k+1] = False
-							for l in range(max_number):
-								if numbers[l+1] and not successLine[1]:
-									line2[3] = l+1
-									numbers[l+1] = False
-									if (line2[0]+line2[1]+line2[2]+line2[3] == 38):
-										# -------------------
-										# proceed with line 3
-										# -------------------
-										successLine[1] = search_line3(max_number, successLine, numbers, line1, line2, line3, line4, line5)
-									else:
-										numbers[l+1] = True
-									if not successLine[1]:
-										numbers[l+1] = True
+							diff = 38 - line2[0] - line2[1] - line2[2]
+							if numbers[diff] and not successLine[1]:
+								line2[3] = diff
+								numbers[diff] = False
+								# -------------------
+								# proceed with line 3
+								# -------------------
+								successLine[1] = search_line3(max_number, successLine, numbers, line1, line2, line3, line4, line5)
+								if not successLine[1]:
+									numbers[diff] = True
 							if not successLine[1]:
 								numbers[k+1] = True
 					if not successLine[1]:
