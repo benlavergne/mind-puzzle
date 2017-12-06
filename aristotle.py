@@ -4,9 +4,7 @@ Aristotle digital mind game
 
 '''
 
-
 import sys
-import numpy as np
 from timeit import default_timer as timer
 
 
@@ -15,8 +13,8 @@ def init_digit_pool(max_number):
 	'''
 	init_values = {}
 
-	for i in range(max_number):
-		init_values[i+1] = True
+	for i in range(1, max_number+1):
+		init_values[i] = True
 
 	return init_values
 
@@ -26,15 +24,15 @@ def search_line1(max_number, numbers, line1, line2, line3, line4, line5):
 	'''
 	successLine = False
 
-	for i in range(max_number):
-		if numbers[i+1] and not successLine:
-			line1[0] = i+1
-			numbers[i+1] = False
-			for j in range(max_number):
-				sum_digit = line1[0]+j+1
-				if numbers[j+1] and (sum_digit >= 19) and not successLine:
-					line1[1] = j+1
-					numbers[j+1] = False
+	for i in range(1, max_number+1):
+		if numbers[i] and not successLine:
+			line1[0] = i
+			numbers[i] = False
+			for j in range(1, max_number+1):
+				sum_digit = line1[0]+j
+				if numbers[j] and (sum_digit >= 19) and not successLine:
+					line1[1] = j
+					numbers[j] = False
 					diff = 38 - line1[0] - line1[1]
 					if numbers[diff]:
 						line1[2] = diff
@@ -46,9 +44,9 @@ def search_line1(max_number, numbers, line1, line2, line3, line4, line5):
 						if not successLine:
 							numbers[diff] = True
 					if not successLine:
-						numbers[j+1] = True
+						numbers[j] = True
 			if not successLine:
-				numbers[i+1] = True
+				numbers[i] = True
 
 	return successLine
 
@@ -58,20 +56,20 @@ def search_line2(max_number, numbers, line1, line2, line3, line4, line5):
 	'''
 	successLine = False
 
-	for i in range(max_number):
-		range_constraint = line1[0]+i+1
-		if numbers[i+1] and (range_constraint >= 19) and not successLine:
-			line2[0] = i+1
-			numbers[i+1] = False
-			for j in range(max_number):
-				if numbers[j+1] and not successLine:
-					line2[1] = j+1
-					numbers[j+1] = False
-					for k in range(max_number):
-						sum_digit = line2[0]+line2[1]+k+1
-						if numbers[k+1] and (sum_digit >= 19) and (sum_digit < 38) and not successLine:
-							line2[2] = k+1
-							numbers[k+1] = False
+	for i in range(1, max_number+1):
+		range_constraint = line1[0]+i
+		if numbers[i] and (range_constraint >= 19) and not successLine:
+			line2[0] = i
+			numbers[i] = False
+			for j in range(1, max_number+1):
+				if numbers[j] and not successLine:
+					line2[1] = j
+					numbers[j] = False
+					for k in range(1, max_number+1):
+						sum_digit = line2[0]+line2[1]+k
+						if numbers[k] and (sum_digit >= 19) and (sum_digit < 38) and not successLine:
+							line2[2] = k
+							numbers[k] = False
 							diff = 38 - line2[0] - line2[1] - line2[2]
 							if numbers[diff]:
 								line2[3] = diff
@@ -83,11 +81,11 @@ def search_line2(max_number, numbers, line1, line2, line3, line4, line5):
 								if not successLine:
 									numbers[diff] = True
 							if not successLine:
-								numbers[k+1] = True
+								numbers[k] = True
 					if not successLine:
-						numbers[j+1] = True
+						numbers[j] = True
 			if not successLine:
-				numbers[i+1] = True
+				numbers[i] = True
 
 	return successLine
 
@@ -102,19 +100,19 @@ def search_line3(max_number, numbers, line1, line2, line3, line4, line5):
 		if numbers[only_choice]:
 			line3[0] = only_choice
 			numbers[only_choice] = False
-			for j in range(max_number):
-				if numbers[j+1] and not successLine:
-					line3[1] = j+1
-					numbers[j+1] = False
-					for k in range(max_number):
-						if numbers[k+1] and not successLine:
-							line3[2] = k+1
-							numbers[k+1] = False
-							for l in range(max_number):
-								sum_digit = line3[0]+line3[1]+line3[2]+l+1
-								if numbers[l+1] and (sum_digit >= 19) and (sum_digit < 38) and not successLine:
-									line3[3] = l+1
-									numbers[l+1] = False
+			for j in range(1, max_number+1):
+				if numbers[j] and not successLine:
+					line3[1] = j
+					numbers[j] = False
+					for k in range(1, max_number+1):
+						if numbers[k] and not successLine:
+							line3[2] = k
+							numbers[k] = False
+							for l in range(1, max_number+1):
+								sum_digit = line3[0]+line3[1]+line3[2]+l
+								if numbers[l] and (sum_digit >= 19) and (sum_digit < 38) and not successLine:
+									line3[3] = l
+									numbers[l] = False
 									diff = 38 - sum_digit
 									if numbers[diff] and (line1[2]+line2[3]+diff == 38):
 										line3[4] = diff
@@ -126,11 +124,11 @@ def search_line3(max_number, numbers, line1, line2, line3, line4, line5):
 										if not successLine:
 											numbers[diff] = True
 									if not successLine:
-										numbers[l+1] = True
+										numbers[l] = True
 							if not successLine:
-								numbers[k+1] = True
+								numbers[k] = True
 					if not successLine:
-						numbers[j+1] = True
+						numbers[j] = True
 			if not successLine:
 				numbers[only_choice] = True
 
@@ -147,15 +145,15 @@ def search_line4(max_number, numbers, line1, line2, line3, line4, line5):
 		if numbers[only_choice]:
 			line4[0] = only_choice
 			numbers[only_choice] = False
-			for j in range(max_number):
-				if numbers[j+1] and not successLine:
-					line4[1] = j+1
-					numbers[j+1] = False
-					for k in range(max_number):
-						sum_digit = line4[0]+line4[1]+k+1
-						if numbers[k+1] and (sum_digit >= 19) and (sum_digit < 38) and not successLine:
-							line4[2] = k+1
-							numbers[k+1] = False
+			for j in range(1, max_number+1):
+				if numbers[j] and not successLine:
+					line4[1] = j
+					numbers[j] = False
+					for k in range(1, max_number+1):
+						sum_digit = line4[0]+line4[1]+k
+						if numbers[k] and (sum_digit >= 19) and (sum_digit < 38) and not successLine:
+							line4[2] = k
+							numbers[k] = False
 							diff = 38 - line4[0] - line4[1] - line4[2]
 							if numbers[diff] and (line1[1]+line2[2]+line3[3]+diff == 38):
 								line4[3] = diff
@@ -167,9 +165,9 @@ def search_line4(max_number, numbers, line1, line2, line3, line4, line5):
 								if not successLine:
 									numbers[diff] = True
 							if not successLine:
-								numbers[k+1] = True
+								numbers[k] = True
 					if not successLine:
-						numbers[j+1] = True
+						numbers[j] = True
 			if not successLine:
 				numbers[only_choice] = True
 
