@@ -1,20 +1,18 @@
-# ---------------------------
-#
-# Aristotle digital mind game
-#
-# ---------------------------
+'''
+
+Aristotle digital mind game
+
+'''
+
 
 import sys
 import numpy as np
-from collections import Counter
 from timeit import default_timer as timer
-
-# dictionnary with all numbers and their availability (true, false)
-numbers = {}
-max_n = 19
 
 
 def init_digit_pool(max_number):
+	''' Initialize dictionnary of numbers with their availability (True/False)
+	'''
 	init_values = {}
 
 	for i in range(max_number):
@@ -23,7 +21,39 @@ def init_digit_pool(max_number):
 	return init_values
 
 
+def search_line1(max_number, successLine, numbers, line1, line2, line3, line4, line5):
+	'''  Search line 1
+	'''
+	for i in range(max_number):
+		if numbers[i+1] and not successLine[0]:
+			line1[0] = i+1
+			numbers[i+1] = False
+			for j in range(max_number):
+				if numbers[j+1] and not successLine[0]:
+					line1[1] = j+1
+					numbers[j+1] = False
+					diff = 38 - line1[0] - line1[1]
+					#print(diff)
+					if diff in numbers and numbers[diff] and not successLine[0]:
+						line1[2] = diff
+						numbers[diff] = False
+						# -------------------
+						# proceed with line 2
+						# -------------------
+						successLine[0] = search_line2(max_number, successLine, numbers, line1, line2, line3, line4, line5)
+					if not successLine[0]:
+						if diff in numbers:
+							numbers[diff] = True
+						numbers[j+1] = True
+			if not successLine[0]:
+				numbers[i+1] = True
+
+	return successLine[0]
+
+
 def search_line2(max_number, successLine, numbers, line1, line2, line3, line4, line5):
+	'''  Search line 2
+	'''
 	for i in range(max_number):
 		if numbers[i+1] and not successLine[1]:
 			line2[0] = i+1
@@ -60,6 +90,8 @@ def search_line2(max_number, successLine, numbers, line1, line2, line3, line4, l
 
 
 def search_line3(max_number, successLine, numbers, line1, line2, line3, line4, line5):
+	'''  Search line 3
+	'''
 	for i in range(max_number):
 		if numbers[i+1] and not successLine[2]:
 			line3[0] = i+1
@@ -105,6 +137,8 @@ def search_line3(max_number, successLine, numbers, line1, line2, line3, line4, l
 
 
 def search_line4(max_number, successLine, numbers, line1, line2, line3, line4, line5):
+	'''  Search line 4
+	'''
 	for i in range(max_number):
 		if numbers[i+1] and not successLine[3]:
 			line4[0] = i+1
@@ -143,6 +177,8 @@ def search_line4(max_number, successLine, numbers, line1, line2, line3, line4, l
 	return successLine[3]
 
 def search_line5(max_number, successLine, numbers, line1, line2, line3, line4, line5):
+	'''  Search line 5
+	'''
 	for i in range(max_number):
 		if numbers[i+1] and not successLine[4]:
 			line5[0] = i+1
@@ -180,7 +216,10 @@ def search_line5(max_number, successLine, numbers, line1, line2, line3, line4, l
 
 
 def search_puzzle(max_number):
+	# start timer
 	start = timer()
+
+	# init data structure for all numbers with their availability
 	numbers = init_digit_pool(max_number)
 
 	# create 5 target lines
@@ -192,32 +231,12 @@ def search_puzzle(max_number):
 
 	successLine = [False, False, False, False, False]
 
-	for i in range(max_number):
-		if numbers[i+1] and not successLine[0]:
-			line1[0] = i+1
-			numbers[i+1] = False
-			for j in range(max_number):
-				if numbers[j+1] and not successLine[0]:
-					line1[1] = j+1
-					numbers[j+1] = False
-					diff = 38 - line1[0] - line1[1]
-					#print(diff)
-					if diff in numbers and numbers[diff] and not successLine[0]:
-						line1[2] = diff
-						numbers[diff] = False
-						# -------------------
-						# proceed with line 2
-						# -------------------
-						successLine[0] = search_line2(max_number, successLine, numbers, line1, line2, line3, line4, line5)
-					if not successLine[0]:
-						if diff in numbers:
-							numbers[diff] = True
-						numbers[j+1] = True
-			if not successLine[0]:
-				numbers[i+1] = True
+	success = search_line1(max_number, successLine, numbers, line1, line2, line3, line4, line5)
+
+	# end timer
 	end = timer()
 
-	if successLine[0]:
+	if success:
 		display_puzzle(line1, line2, line3, line4, line5)
 		display_time(end - start)
 	else:
