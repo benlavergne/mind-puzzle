@@ -1,10 +1,16 @@
 '''
+Aristotle Numbers Puzzle
+------------------------
+With numbers ranging from 1 to 19, create lines equal to 38 (diagonals included)
 
-Aristotle digital mind game
+  - - -            1 18 19
+ - - - -          ?  ?  ?  ?
+- - - - -   ==>  ?  ?  ?  ?  ?
+ - - - -          ?  ?  ?  ?
+  - - -            ?  ?  ?
 
 '''
 
-import sys
 from timeit import default_timer as timer
 
 def init_digit_pool(max_number):
@@ -16,7 +22,6 @@ def init_digit_pool(max_number):
 		init_values[i] = True
 
 	return init_values
-
 
 def search_line1(max_number, numbers, line1, line2, line3, line4, line5):
 	'''  Search line 1
@@ -234,20 +239,15 @@ def search_puzzle(max_number):
 		print("Problem...")
 
 def display_puzzle(line1, line2, line3, line4, line5):
-	# display the result
-	# ------------------
-	sys.stdout.write('\r\n' + '  ' + ''.join(str(line1[i]).center(3) for i in range(3)) + '\n' \
-					+ ' ' + ''.join(str(line2[i]).center(3) for i in range(4)) + '\n' \
-					+ ''.join(str(line3[i]).center(3) for i in range(5)) + '\n' \
-					+ ' ' + ''.join(str(line4[i]).center(3) for i in range(4)) + '\n' \
-					+ '  ' + ''.join(str(line5[i]).center(3) for i in range(3)) + '\n\n')
-	sys.stdout.flush()
+	print('\n' + '  ' + ''.join(str(line1[i]).center(3) for i in range(3)) + '\n' \
+			+ ' ' + ''.join(str(line2[i]).center(3) for i in range(4)) + '\n' \
+			+ ''.join(str(line3[i]).center(3) for i in range(5)) + '\n' \
+			+ ' ' + ''.join(str(line4[i]).center(3) for i in range(4)) + '\n' \
+			+ '  ' + ''.join(str(line5[i]).center(3) for i in range(3)) + '\n')
 
 def display_time(time_length):
-	print(" Time elapsed in seconds : ", time_length)
+	print(" Time elapsed in seconds :", str(time_length)[:6])
 
 
 if __name__ == '__main__':
-	# input interface
-	# ---------------
 	search_puzzle(19)
